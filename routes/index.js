@@ -8,7 +8,7 @@ const GBP = 'gbp';
 const USD = 'usd';
 
 const options = (txt) => ({
-  uri: 'https://hooks.slack.com/services/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',
+  uri: 'https://hooks.slack.com/services/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',
   body: JSON.stringify({text: txt}),
   method: 'POST',
   headers: { 'Content-Type': 'application/json' }
@@ -42,13 +42,13 @@ const cacheCheck = (gbp, usd) => {
   }
 };
 
-// router.get('/', async (req, res) => {
-//   request.get('https://www.bitstamp.net/api/v2/ticker/xrpusd/', (_, res, usd) => {
-//     request.get('https://www.bitstamp.net/api/v2/ticker/xrpgbp/', (_, resp, gbp) => 
-//       cacheCheck(JSON.parse(gbp).last, JSON.parse(usd).last))
-//   });
-//   return null;
-// });
+router.get('/', async (req, res) => {
+  request.get('https://www.bitstamp.net/api/v2/ticker/xrpusd/', (_, res, usd) => {
+    request.get('https://www.bitstamp.net/api/v2/ticker/xrpgbp/', (_, resp, gbp) => 
+      cacheCheck(JSON.parse(gbp).last, JSON.parse(usd).last))
+  });
+  return null;
+});
 
 cron.schedule('*/5 * * * *', () => 
   request.get('https://www.bitstamp.net/api/v2/ticker/xrpusd/', (_, res, usd) => 
