@@ -7,6 +7,13 @@ var util = require('./util');
 const XRP = 'xrp';
 const ETH = 'eth';
 
+router.any('/:crypto/now', function (req, res) {
+  const coin = req.params.crypto;
+  request.get(`https://www.bitstamp.net/api/v2/ticker/${coin}usd/`, (_, res, usd) => 
+    request.get(`https://www.bitstamp.net/api/v2/ticker/${coin}gbp/`, (_, resp, gbp) =>
+      util.priceCheck(JSON.parse(gbp).last, JSON.parse(usd).last, coin)))
+})
+
 cron.schedule('*/5 * * * *', () => 
   request.get(`https://www.bitstamp.net/api/v2/ticker/${XRP}usd/`, (_, res, usd) => 
     request.get(`https://www.bitstamp.net/api/v2/ticker/${XRP}gbp/`, (_, resp, gbp) =>
