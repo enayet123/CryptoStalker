@@ -50,7 +50,7 @@ const cacheCheck = (gbp, usd) => {
 //   return null;
 // });
 
-cron.schedule('* * * * *', () => 
+cron.schedule('*/5 * * * *', () => 
   request.get('https://www.bitstamp.net/api/v2/ticker/xrpusd/', (_, res, usd) => 
     request.get('https://www.bitstamp.net/api/v2/ticker/xrpgbp/', (_, resp, gbp) =>
       cacheCheck(JSON.parse(gbp).last, JSON.parse(usd).last)))
