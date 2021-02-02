@@ -4,6 +4,7 @@ var cron = require('node-cron');
 var request = require('request');
 var util = require('./util');
 var constants = require('./constants');
+var cache = require('memory-cache');
 
 const XRP = 'xrp';
 const ETH = 'eth';
