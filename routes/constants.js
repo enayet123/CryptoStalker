@@ -5,7 +5,7 @@ module.exports = Object.freeze({
   },
   MARGIN: {
     xrp: 2.5,
-    eth: 50,
+    eth: 100,
   },
   GBP: 'gbp',
   USD: 'usd',
