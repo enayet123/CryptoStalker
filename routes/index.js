@@ -3,6 +3,7 @@ var router = express.Router();
 var cron = require('node-cron');
 var request = require('request');
 var util = require('./util');
+var constants = require('./constants');
 
 const XRP = 'xrp';
 const ETH = 'eth';
@@ -13,9 +14,12 @@ router.all('/', (req, res) => {
 
 router.all('/:crypto/now', function (req, res) {
   const coin = req.params.crypto;
+  cache.put(coin + constants.GBP, 0);
+  cache.put(coin + constants.USD, 0);
   request.get(`https://www.bitstamp.net/api/v2/ticker/${coin}usd/`, (_, res, usd) => 
     request.get(`https://www.bitstamp.net/api/v2/ticker/${coin}gbp/`, (_, resp, gbp) =>
-      util.priceCheck(JSON.parse(gbp).last, JSON.parse(usd).last, coin)))
+      util.priceCheck(JSON.parse(gbp).last, JSON.parse(usd).last, coin)));
+  res.send('OK');
 })
 
 cron.schedule('*/5 * * * *', () => 
