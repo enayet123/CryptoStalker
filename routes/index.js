@@ -20,7 +20,7 @@ router.all('/:crypto/now', function (req, res) {
   request.get(`https://www.bitstamp.net/api/v2/ticker/${coin}usd/`, (_, res, usd) => 
     request.get(`https://www.bitstamp.net/api/v2/ticker/${coin}gbp/`, (_, resp, gbp) =>
       util.priceCheck(JSON.parse(gbp).last, JSON.parse(usd).last, coin)));
-  res.send('OK');
+  res.status(204).send()
 })
 
 cron.schedule('*/5 * * * *', () => 
