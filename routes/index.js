@@ -57,7 +57,8 @@ const update = (forced, res) => {
   console.log(changes);
   if (changes.length) {
     const message = changes.reduce((acc, val) => acc + '\n' + val);
-    forced ? res.send(message) : util.sendToSlack(message);
+    util.sendToSlack(message);
+    if (forced) res.status(204).send();
   }
 };
 
