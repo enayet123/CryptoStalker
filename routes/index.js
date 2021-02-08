@@ -40,26 +40,27 @@ const update24 = () => {
 
 const update = (forced, res) => {
   let changes = [];
-  const stored = {  ...store };
   const cached = JSON.parse(cache.get(constants.STORE));
 
   for (const coinName in cached) {
-    const storeData = store[coinName];
+    const storeData = { ...store }[coinName];
     const cacheData = JSON.parse(cache.get(coinName));
+    const cache24Data = JSON.parse(cache.get(`${coinName}24`));
     
-    if (cacheData) {
+    if (cache24Data && cacheData) {
       const margin = coins[coinName].margin;
       const difference = Math.abs(storeData.USD - cacheData.USD);
       
       if (difference > margin || forced) {
         const emoji = coins[coinName].emoji;
-        const dailyMovement = Math.abs(((cacheData.USD - storeData.USD) / cacheData.USD)).toFixed(2);
-        const arrowEmoji = (((storeData.USD - cacheData.USD) > 0) ? ':up' : ':down') + 'arrow:';
-        cache.put(coinName, JSON.stringify(stored[coinName]));
+        const percentageChange = ((cache24Data.USD - storeData.USD) / cache24Data.USD);
+        const dailyMovement = Math.abs(percentageChange).toFixed(3);
+        const arrowEmoji = ((percentageChange > 0) ? ':up' : ':down') + 'arrow:';
+        cache.put(coinName, JSON.stringify(storeData));
         changes = [ ...changes, `${emoji}  ${dailyMovement}% ${arrowEmoji} ${util.asUSD(storeData.USD)}   ${util.asGBP(storeData.USD)}`];
       }
     } else {
-      cache.put(coinName, JSON.stringify(stored[coinName]));
+      cache.put(coinName, JSON.stringify(storeData));
     }
   }
 
