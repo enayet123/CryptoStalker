@@ -46,6 +46,7 @@ const update = (forced, res) => {
       if (difference > margin || forced) {
         const emoji = coins[coinName].emoji;
         const arrowEmoji = (((storeData.USD - cacheData.USD) > 0) ? ':up' : ':down') + 'arrow:';
+        cache.put(coinName, JSON.stringify(stored[coinName]));
         changes = [ ...changes, `${emoji}${arrowEmoji} ${util.asUSD(storeData.USD)} | ${util.asGBP(storeData.USD)}`];
       }
     } else {
