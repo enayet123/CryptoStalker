@@ -54,8 +54,8 @@ const update = (forced, res) => {
       if (difference > margin || forced) {
         const emoji = coins[coinName].emoji;
         const percentageChange = ((cache24Data.USD - storeData.USD) / cache24Data.USD);
-        const dailyMovement = Math.abs(percentageChange).toFixed(3);
-        const arrowEmoji = ((percentageChange > 0) ? ':up' : ':down') + 'arrow:';
+        const dailyMovement = Math.abs(percentageChange * 100).toFixed(3);
+        const arrowEmoji = ((percentageChange > 0) ? ':down' : ':up') + 'arrow:';
         cache.put(coinName, JSON.stringify(storeData));
         changes = [ ...changes, `${emoji}  ${dailyMovement}% ${arrowEmoji} ${util.asUSD(storeData.USD)}   ${util.asGBP(storeData.USD)}`];
       }
