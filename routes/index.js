@@ -30,6 +30,14 @@ stream.on(constants.STREAM_MESSAGE, function incoming(data) {
   }
 });
 
+const update24 = () => {
+  const stored = { ...store };
+
+  for (const coinName in stored) {
+    cache.put(`${coinName}24`, JSON.stringify(stored[coinName]));
+  }
+}
+
 const update = (forced, res) => {
   let changes = [];
   const stored = {  ...store };
@@ -45,17 +53,16 @@ const update = (forced, res) => {
       
       if (difference > margin || forced) {
         const emoji = coins[coinName].emoji;
+        const dailyMovement = Math.abs(((cacheData.USD - storeData.USD) / cacheData.USD)).toFixed(2);
         const arrowEmoji = (((storeData.USD - cacheData.USD) > 0) ? ':up' : ':down') + 'arrow:';
         cache.put(coinName, JSON.stringify(stored[coinName]));
-        changes = [ ...changes, `${emoji}${arrowEmoji} ${util.asUSD(storeData.USD)} | ${util.asGBP(storeData.USD)}`];
+        changes = [ ...changes, `${emoji}  ${dailyMovement}% ${arrowEmoji} ${util.asUSD(storeData.USD)}   ${util.asGBP(storeData.USD)}`];
       }
     } else {
       cache.put(coinName, JSON.stringify(stored[coinName]));
     }
   }
 
-  console.log(store);
-  console.log(changes);
   if (changes.length) {
     const message = changes.reduce((acc, val) => acc + '\n' + val);
     util.sendToSlack(message);
@@ -63,11 +70,15 @@ const update = (forced, res) => {
   }
 };
 
+setTimeout(() => update24(), 30000);
+
 router.get('/', (_, res) => res.send(JSON.stringify(coins)));
 
 router.all('/now', (_, res)  => update(true, res));
 
 cron.schedule('* * * * *', () => update(false));
+
+cron.schedule('0 0 * * *', () => update24());
 
 cron.schedule('0 0 * * *', () => util.getConversion());
 
