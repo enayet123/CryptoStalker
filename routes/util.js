@@ -46,7 +46,7 @@ const getStats = (cache24Data, cacheData, storeData) => {
   const arrow24Emoji = ((percentage24Change > 0) ? ':down' : ':up') + 'arrow:';
   const arrowEmoji = ((percentageChange > 0) ? ':down' : ':up') + 'arrow:';
   const dailyMovement = Math.abs(percentage24Change * 100).toFixed(3);
-  const delta = `${percentageChange > 0 ? '-' : '+'}${priceChangeAbsTrunc}`;
+  const delta = `${priceChangeAbsTrunc}`;
   return { delta, dailyMovement, arrowEmoji, arrow24Emoji };
 }
 

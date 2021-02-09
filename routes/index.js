@@ -20,9 +20,8 @@ util.getConversion();
 
 stream.on(constants.STREAM_MESSAGE, function incoming(data) {
   const msg = JSON.parse(data);
-  console.log(data);
   if (msg.TYPE === constants.MSG_TYPE) {
-    // console.log(`[PRICE] ${msg.M} \t${msg.FSYM}: ${msg.P} ${msg.TSYM}`);
+    console.log(`[PRICE] ${msg.M} \t${msg.FSYM}: ${msg.P} ${msg.TSYM}`);
     if (!(`${msg.FSYM}` in store)) {
       store[`${msg.FSYM}`] = {}
     }
