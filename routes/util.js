@@ -38,10 +38,23 @@ const sendToSlack = (str) => request(options(str), (error, response) => {
   return;
 });
 
+const getStats = (cache24Data, cacheData, storeData) => {
+  const percentage24Change = ((cache24Data.USD - storeData.USD) / cache24Data.USD);
+  const percentageChange = ((cacheData.USD - storeData.USD) / cacheData.USD);
+  const priceChangeAbs = Math.abs(cacheData.USD - storeData.USD).toFixed(3);
+  const priceChangeAbsTrunc = new String(priceChangeAbs).substring(0,5);
+  const arrow24Emoji = ((percentage24Change > 0) ? ':down' : ':up') + 'arrow:';
+  const arrowEmoji = ((percentageChange > 0) ? ':down' : ':up') + 'arrow:';
+  const dailyMovement = Math.abs(percentage24Change * 100).toFixed(3);
+  const delta = `${percentageChange > 0 ? '-' : '+'}${priceChangeAbsTrunc}`;
+  return { delta, dailyMovement, arrowEmoji, arrow24Emoji };
+}
+
 module.exports = {
   getSubscriptions,
   getConversion,
   asUSD,
   asGBP,
-  sendToSlack
+  sendToSlack,
+  getStats,
 };

@@ -20,8 +20,9 @@ util.getConversion();
 
 stream.on(constants.STREAM_MESSAGE, function incoming(data) {
   const msg = JSON.parse(data);
+  console.log(data);
   if (msg.TYPE === constants.MSG_TYPE) {
-    console.log(`[PRICE] ${msg.M} \t${msg.FSYM}: ${msg.P} ${msg.TSYM}`);
+    // console.log(`[PRICE] ${msg.M} \t${msg.FSYM}: ${msg.P} ${msg.TSYM}`);
     if (!(`${msg.FSYM}` in store)) {
       store[`${msg.FSYM}`] = {}
     }
@@ -53,11 +54,9 @@ const update = (forced, res) => {
       
       if (difference > margin || forced) {
         const emoji = coins[coinName].emoji;
-        const percentageChange = ((cache24Data.USD - storeData.USD) / cache24Data.USD);
-        const dailyMovement = Math.abs(percentageChange * 100).toFixed(3);
-        const arrowEmoji = ((percentageChange > 0) ? ':down' : ':up') + 'arrow:';
+        const { delta, dailyMovement, arrowEmoji, arrow24Emoji } = util.getStats(cache24Data, cacheData, storeData);
         cache.put(coinName, JSON.stringify(storeData));
-        changes = [ ...changes, `${emoji}  ${dailyMovement}% ${arrowEmoji} ${util.asUSD(storeData.USD)}   ${util.asGBP(storeData.USD)}`];
+        changes = [ ...changes, `${emoji} ${delta} ${arrowEmoji} ${util.asUSD(storeData.USD)}   ${util.asGBP(storeData.USD)} ${arrow24Emoji} ${dailyMovement}%`];
       }
     } else {
       cache.put(coinName, JSON.stringify(storeData));
