@@ -55,7 +55,7 @@ const update = (forced, res) => {
         const emoji = coins[coinName].emoji;
         const { delta, dailyMovement, arrowEmoji, arrow24Emoji } = util.getStats(cache24Data, cacheData, storeData);
         cache.put(coinName, JSON.stringify(storeData));
-        changes = [ ...changes, `${emoji} ${delta} ${arrowEmoji} ${util.asUSD(storeData.USD)}   ${util.asGBP(storeData.USD)} ${arrow24Emoji} ${dailyMovement}%`];
+        changes = [ ...changes, `${emoji} ${arrowEmoji} $${delta} → ${util.asUSD(storeData.USD)} ≅ ${util.asGBP(storeData.USD)} ${arrow24Emoji} ${dailyMovement}%`];
       }
     } else {
       cache.put(coinName, JSON.stringify(storeData));
