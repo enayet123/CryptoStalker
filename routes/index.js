@@ -4,31 +4,20 @@ const cron = require('node-cron');
 const util = require('./util');
 const constants = require('./constants');
 const cache = require('memory-cache');
-const createStream = require('./cryptocompare');
+const CryptoCompare = require('./cryptocompare');
 const env = require('dotenv');
 
 env.config();
 
 // Obj used to store current prices, acting as a sort of dictionary
-const store = {};
 
+const store = {};
 const coins = JSON.parse(process.env.COINS);
 const subs = util.getSubscriptions(coins);
-const stream = createStream(subs);
-
+let stream = CryptoCompare.connect().withReconnect().subscribe(subs).addTradeListener(store);
+// let stream = cryptocompare.connect(subs);
+// cryptocompare.registerStream({ stream, store });
 util.getConversion();
-
-stream.on(constants.STREAM_MESSAGE, function incoming(data) {
-  const msg = JSON.parse(data);
-  if (msg.TYPE === constants.MSG_TYPE) {
-    console.log(`[PRICE] ${msg.M} \t${msg.FSYM}: ${msg.P} ${msg.TSYM}`);
-    if (!(`${msg.FSYM}` in store)) {
-      store[`${msg.FSYM}`] = {}
-    }
-    store[`${msg.FSYM}`][constants.USD] = msg.P;
-    cache.put(constants.STORE, JSON.stringify(store));
-  }
-});
 
 const update24 = () => {
   const stored = { ...store };

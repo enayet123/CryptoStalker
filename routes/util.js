@@ -1,4 +1,3 @@
-var constants = require('./constants');
 var request = require('request');
 var cache = require('memory-cache');
 
