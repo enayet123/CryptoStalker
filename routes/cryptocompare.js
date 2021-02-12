@@ -70,8 +70,8 @@ const CryptoCompare = {
       const msg = JSON.parse(data);
       
       if (msg.TYPE === constants.MSG_TYPE) {
-        // if (!!process.env.VERBOSE)
-        //   console.log(`[PRICE] ${msg.M} \t${msg.FSYM}: ${msg.P} ${msg.TSYM}`);
+        if (!!process.env.VERBOSE)
+          console.log(`[PRICE] ${msg.M} \t${msg.FSYM}: ${msg.P} ${msg.TSYM}`);
         if (!(`${msg.FSYM}` in store))
           store[`${msg.FSYM}`] = {};
         store[`${msg.FSYM}`][constants.USD] = msg.P;
