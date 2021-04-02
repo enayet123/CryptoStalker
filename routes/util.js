@@ -8,7 +8,7 @@ const getSubscriptions = (coins) =>
   //.flatMap(e => [`${e}${constants.GBP}`, `${e}${constants.USD}`]);
 
 const getConversion = async () => 
-  request({ uri: 'https://api.exchangeratesapi.io/latest?base=USD' }, (_, __, body) => 
+  request({ uri: process.env.EXCHANGE_HTTPS + process.env.EXCHANGE_KEY + process.env.EXCHANGE_PARAMS }, (_, __, body) => 
     cache.put('USD_GBP', JSON.parse(body).rates.GBP)
   );
 
