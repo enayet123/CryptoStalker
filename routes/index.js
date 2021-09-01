@@ -8,6 +8,7 @@ const CryptoCompare = require('./cryptocompare');
 const env = require('dotenv');
 
 env.config();
+console.log(process.env)
 
 // Obj used to store current prices, acting as a sort of dictionary
 

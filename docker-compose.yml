@@ -2,6 +2,16 @@ version: '3'
 
 services:
   cryptostalker:
+    environment:
+      - PORT=${PORT}
+      - VERBOSE=${VERBOSE}
+      - EXCHANGE_KEY=${EXCHANGE_KEY}
+      - EXCHANGE_HTTPS=${EXCHANGE_HTTPS}
+      - EXCHANGE_PARAMS=${EXCHANGE_PARAMS}
+      - CRYPTO_COMPARE_API=${CRYPTO_COMPARE_API}
+      - CRYPTO_COMPARE_WEBSOCKET=${CRYPTO_COMPARE_WEBSOCKET}
+      - SLACK_HOOK_URL_GENERAL=${SLACK_HOOK_URL_GENERAL}
+      - COINS=${COINS}
     image: cryptostalker:latest
     ports:
       - "3003:3003"
