@@ -8,7 +8,10 @@ const CryptoCompare = require('./cryptocompare');
 const env = require('dotenv');
 
 env.config();
-console.log(process.env)
+
+const envKeys = ["PORT", "VERBOSE", "DEBUG", "EXCHANGE_HTTPS", "EXCHANGE_PARAMS", "EXCHANGE_KEY", "CRYPTO_COMPARE_WEBSOCKET", "CRYPTO_COMPARE_API", "SLACK_HOOK_URL_GENERAL", "COINS"];
+console.log("[ENVIR]");
+envKeys.forEach(key => console.log("  ", key, process.env[key]));
 
 // Obj used to store current prices, acting as a sort of dictionary
 
@@ -61,7 +64,7 @@ const update = (forced, res) => {
 
 setTimeout(() => update24(), 30000);
 
-router.get('/', (_, res) => res.send(JSON.stringify(coins)));
+router.get('/', (_, res) => res.json(coins));
 
 router.all('/now', (_, res)  => update(true, res));
 
