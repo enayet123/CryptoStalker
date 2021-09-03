@@ -27,7 +27,4 @@ package-lock.json
 coverage
 
 # Benchmarking
-benchmarks/graphs
-
-# Docker
-Dockerfile
+benchmarks/graphsx
