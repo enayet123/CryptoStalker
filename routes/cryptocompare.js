@@ -14,7 +14,6 @@ const CryptoCompare = {
   heartbeat: function(self) {
     // const self = this;
     // this.lastHeartbeat = Date.now();
-    console.log("[CONNECTION] HEARTBEAT")
     // console.log(this.heartbeatTimeout)
     clearTimeout(self.heartbeatTimeout);
     // console.log(this.heartbeatTimeout)
@@ -68,7 +67,11 @@ const CryptoCompare = {
     const heartbeat = this.heartbeat;
     this.stream.on(constants.STREAM_MESSAGE, function incoming(data) {
       const msg = JSON.parse(data);
-      
+
+      if(!!process.env.DEBUG) {
+        console.log("[DEBUG] " + data)
+      }
+
       if (msg.TYPE === constants.MSG_TYPE) {
         if (!!process.env.VERBOSE)
           console.log(`[PRICE] ${msg.M} \t${msg.FSYM}: ${msg.P} ${msg.TSYM}`);
@@ -77,7 +80,7 @@ const CryptoCompare = {
         store[`${msg.FSYM}`][constants.USD] = msg.P;
         cache.put(constants.STORE, JSON.stringify(store));
       } else if (msg.TYPE === constants.HEARTBEAT_TYPE) {
-        console.log(msg);
+        console.log("[HEARTBEAT] " + msg);
         this.lastHeartbeat = msg.TIMEMS;
         heartbeat(self);
       }
