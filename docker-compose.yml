@@ -2,6 +2,9 @@ version: '3'
 
 services:
   cryptostalker:
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: unless-stopped
     image: cryptostalker:latest
     ports:
