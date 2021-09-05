@@ -31,3 +31,6 @@ benchmarks/graphsx
 
 # Docker
 docker-compose.override.yml
+
+# App related
+coins.yml

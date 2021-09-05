@@ -12,17 +12,11 @@ const CryptoCompare = {
   lastHeartbeat: Date.now(),
 
   heartbeat: function(self) {
-    // const self = this;
-    // this.lastHeartbeat = Date.now();
-    // console.log(this.heartbeatTimeout)
     clearTimeout(self.heartbeatTimeout);
-    // console.log(this.heartbeatTimeout)
     self.heartbeatTimeout = setTimeout(() => {
       console.log("[CONNECTION] TERMINATED")
       util.sendToSlack(`Something went wrong 🤔 I'll be back in a minute...`)
       self.stream.terminate();
-      // const now = Date.now();
-      // console.log(now, self.lastHeartbeat, now - self.lastHeartbeat)
     }, 65000);
   },
 
@@ -38,12 +32,12 @@ const CryptoCompare = {
     this.stream.on(constants.STREAM_OPEN, () => {
       const subRequest = { "action": "SubAdd", "subs": subs };
       this.stream.send(JSON.stringify(subRequest));
-      // if (this.reconnect) {
-      //   this.lastHeartbeat = Date.now();
-      //   this.heartbeat(this.stream, this);
-      // }
     });
     return this;
+  },
+
+  addSubscription: function(sub) {
+    this.stream.send(util.asSubscription(sub));
   },
 
   withReconnect: function() {

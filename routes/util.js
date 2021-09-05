@@ -4,8 +4,10 @@ var cache = require('memory-cache');
 const getSubscriptions = (coins) => 
   Object.keys(coins)
   .map(k => coins[k])
-  .map(e => `0~${e.exchange}~${e.name}~${e.pair}`)
-  //.flatMap(e => [`${e}${constants.GBP}`, `${e}${constants.USD}`]);
+  .map(asSubscription)
+
+const asSubscription = (coin) => 
+  `0~${coin.exchange}~${coin.name}~${coin.pair}`
 
 const getConversion = async () => 
   request({ uri: process.env.EXCHANGE_HTTPS + process.env.EXCHANGE_KEY + process.env.EXCHANGE_PARAMS }, (_, __, body) => 
@@ -51,6 +53,7 @@ const getStats = (cache24Data, cacheData, storeData) => {
 
 module.exports = {
   getSubscriptions,
+  asSubscription,
   getConversion,
   asUSD,
   asGBP,

@@ -6,7 +6,7 @@ const constants = require('./constants');
 const cache = require('memory-cache');
 const CryptoCompare = require('./cryptocompare');
 const env = require('dotenv');
-const yaml = require('yaml');
+const YAML = require('yaml');
 const fs = require('fs');
 
 env.config();
@@ -16,13 +16,15 @@ console.log("[ENVIR]");
 envKeys.forEach(key => console.log("  ", key, process.env[key]));
 
 // Create coins.yml file if not exists
-if (!fs.existsSync(constants.COIN_FILE))
-  fs.open(constants.COIN_FILE, 'w', (err) => {
-    if (err) throw err;
-    console.log('[FILE]', 'Created new ' + constants.COIN_FILE + ' file')
-  })
+if (!fs.existsSync(constants.COIN_FILE)) {
+  const values = Object.values(JSON.parse(process.env.COINS));
+  const yaml = values.map(v => `${v.name}:${v.pair}:${v.exchange}:${v.margin}`)
+  fs.writeFileSync(constants.COIN_FILE, YAML.stringify(yaml))
+  console.log(`[FILE] Created ${constants.COIN_FILE} with ${values.map(v => v.name)}`)
+} else {
 
-console.log(process.env.COINS)
+}
+
 // Obj used to store current prices, acting as a sort of dictionary
 
 // const store = {};
@@ -54,7 +56,7 @@ console.log(process.env.COINS)
 //       const difference = Math.abs(storeData.USD - cacheData.USD);
       
 //       if (difference > margin || forced) {
-//         const emoji = coins[coinName].emoji;
+//         const emoji = `:${coins[coinName].name}:`;
 //         const { delta, dailyMovement, arrowEmoji, arrow24Emoji } = util.getStats(cache24Data, cacheData, storeData);
 //         cache.put(coinName, JSON.stringify(storeData));
 //         changes = [ ...changes, `${emoji} ${arrowEmoji} $${delta} → ${util.asUSD(storeData.USD)} ≅ ${util.asGBP(storeData.USD)} ${arrow24Emoji} ${dailyMovement}%`];
